@@ -6,13 +6,16 @@ public class Brick : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Renderer rendererBrick = GetComponent<Renderer>();
-        Player player = other.GetComponent<Player>();
-        Renderer rendererPlayer = player.player.GetComponent<Renderer>();
-        if (rendererBrick.material.name == rendererPlayer.material.name)
+        if (other.name == "Player")
         {
-            Destroy(this.gameObject);
-            player.addBrick();
+            Renderer rendererBrick = GetComponent<Renderer>();
+            Player player = other.GetComponent<Player>();
+            Renderer rendererPlayer = player.player.GetComponent<Renderer>();
+            if (rendererBrick.material.name == rendererPlayer.material.name)
+            {
+                Destroy(this.gameObject);
+                player.addBrick();
+            }
         }
     }
 }
