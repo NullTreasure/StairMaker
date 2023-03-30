@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     public GameObject player;
 
+    private Bridge _bridge;
     private Ground ground;
     private Vector3 positionGround;
     private float horizontal;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     private Vector3 direct;
     private bool isMoving;
     private float speed;
+    private float rotationSpeed;
     public int countBrick;
     private float maxSlopeAngle = 90.0f;
 
@@ -27,12 +29,12 @@ public class Player : MonoBehaviour
         isMoving = false;
         direct = Vector3.zero;
         speed = 10;
+        rotationSpeed = 720;
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.checkBrick();
         horizontal = joystick.Horizontal;
         vertical = joystick.Vertical;
         direct = new Vector3(horizontal, 0, vertical);
@@ -41,13 +43,19 @@ public class Player : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up *2, Vector3.down, out hit, Mathf.Infinity, Bridge))
             {
+                this._bridge.limitArea();
                 this.MoveOnBridge(direct, hit);
-                if (vertical > 0) this.checkBrick();
+                if (vertical > 0)
+                {
+                    this.checkBrick();   
+                }
             }
             else
             {
                 transform.position = new Vector3(transform.position.x, positionGround.y + 0.9f, transform.position.z);
                 ground.limitArea();
+                Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,toRotation, rotationSpeed * Time.deltaTime);
                 transform.position += direct * speed * Time.deltaTime; 
             }
 
@@ -98,6 +106,9 @@ public class Player : MonoBehaviour
         {
             movementDirection = Vector3.ProjectOnPlane(direction, slopeNormal).normalized;
         }
+
+        Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         transform.position += movementDirection * speed * Time.deltaTime;
 
     }
@@ -108,6 +119,11 @@ public class Player : MonoBehaviour
         {
             positionGround = other.transform.position;
             ground = other.GetComponent<Ground>();
+        }
+        if (other.name.StartsWith("Real Bridge"))
+        {
+            GameObject bridge = other.transform.parent.gameObject;
+            _bridge = bridge.GetComponent<Bridge>();
         }
     }
 }

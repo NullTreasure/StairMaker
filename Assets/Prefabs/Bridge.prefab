@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5055968021163825919}
   - component: {fileID: 205482577122995189}
   - component: {fileID: 2705747086357621583}
-  - component: {fileID: 3832780971728342131}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -99,22 +98,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.0000000010363701, z: -2.486195}
---- !u!54 &3832780971728342131
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4944520740565107665}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &6892803551503496307
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +110,6 @@ GameObject:
   - component: {fileID: 8097686510553639337}
   - component: {fileID: 1322924669785578187}
   - component: {fileID: 2966452437295257771}
-  - component: {fileID: 11942199554738224}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -214,22 +196,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000014901161, y: -1.8985996e-10, z: -1.5341455}
---- !u!54 &11942199554738224
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6892803551503496307}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &8496456552098669051
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,6 +205,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4977945572679379831}
+  - component: {fileID: -5835617921466000918}
   m_Layer: 0
   m_Name: Bridge
   m_TagString: Untagged
@@ -275,6 +242,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5835617921466000918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8496456552098669051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06512e75c9007fe41be769476d9a9a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &8993277080609259968
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,6 +270,7 @@ GameObject:
   - component: {fileID: 6465873360813130214}
   - component: {fileID: 4483065437897688935}
   - component: {fileID: 8118999768774161927}
+  - component: {fileID: 1498893160}
   m_Layer: 3
   m_Name: Real Bridge
   m_TagString: Untagged
@@ -370,8 +354,24 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1.0259502}
+  m_Center: {x: 0, y: 0.000000010523363, z: -0.012975087}
+--- !u!54 &1498893160
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8993277080609259968}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &81394351605300820
 PrefabInstance:
   m_ObjectHideFlags: 0
