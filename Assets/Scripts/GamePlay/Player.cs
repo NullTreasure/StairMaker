@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask Bridge;
 
     public GameObject player;
+    public GameObject groundState;
 
     private Bridge _bridge;
     private Ground ground;
@@ -43,6 +44,13 @@ public class Player : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up *2, Vector3.down, out hit, Mathf.Infinity, Bridge))
             {
+                if (countBrick == 1)
+                {
+                    this._bridge.updateMaxz();
+                } else if (countBrick >1)
+                {
+                    this._bridge.resetMaxz();
+                }
                 this._bridge.limitArea();
                 this.MoveOnBridge(direct, hit);
                 if (vertical > 0)
@@ -52,6 +60,10 @@ public class Player : MonoBehaviour
             }
             else
             {
+                if (countBrick == 0)
+                {
+                    this.ground.banBridge();
+                }
                 transform.position = new Vector3(transform.position.x, positionGround.y + 0.9f, transform.position.z);
                 ground.limitArea();
                 Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
@@ -117,6 +129,7 @@ public class Player : MonoBehaviour
     {
         if (other.name.StartsWith("Ground"))
         {
+            groundState = other.gameObject;
             positionGround = other.transform.position;
             ground = other.GetComponent<Ground>();
         }

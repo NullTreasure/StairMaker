@@ -6,67 +6,60 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private GameObject prefabBrick;
     [SerializeField] private ColorTypes color;
     [SerializeField] private Material redMaterial;
     [SerializeField] private Material yellowMaterial;
     [SerializeField] private Material blueMaterial;
-    [SerializeField] private GameObject player;
-    private List<Vector3> Bricks = new List<Vector3>();
+    [SerializeField] private GameObject playerSkin;
+    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private List<GameObject> GroundState;
+
+    List<int> numColor = new List<int>(3) { 1, 2, 3 };
     private void Awake()
     {
         
     }
     void Start()
     {
-        this.declarePositonList();
-        this.setColor(player);
+        GameObject enemy1 = Instantiate(enemy, enemy.transform.position,Quaternion.identity);
+        enemy1.SetActive(true);
+        this.setColor(enemy1.GetComponent<Enemy>().enemy);
+        GameObject enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3,0,0), Quaternion.identity);
+        enemy2.SetActive(true);
+        this.setColor(enemy2.GetComponent<Enemy>().enemy);
+        this.setColor(playerSkin);
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        this.SpawnBrick();
-    }
-
-
-    public void SpawnBrick()
-    {
-        if (Bricks.Count== 0) return;
-        else
+        foreach(GameObject ground in GroundState)
         {
-            int Index = Random.Range(0, Bricks.Count -1);
-            Vector3 brickPosition = Bricks[Index];
-            GameObject brick = Instantiate(prefabBrick, brickPosition, Quaternion.identity);
-            this.setColor(brick);
-            Bricks.RemoveAt(Index);
-        }
-    }
-    private void declarePositonList()
-    {
-        for (int i = -6; i <= 6; i ++)
-        {
-            for (int j = -6; j <=6; j ++)
+            if (ground.name != Player.GetComponent<Player>().groundState.name)
             {
-                Vector3 postion = new Vector3(i, -0.9f, j);
-                Bricks.Add(postion);
+                ground.GetComponent<Ground>().deActiveBrick(Player.GetComponent<Player>().player);
             }
         }
     }
+
+    // Update is called once per frame
     private void setColor(GameObject brick)
     {
-        int rnd = Random.Range(1, 4);
+        int rnd = 0;
         Material color = redMaterial;
+        do
+        {
+            rnd = Random.Range(1, 4);
+        } while (!numColor.Contains(rnd));
         switch(rnd)
         {
             case 1:
-                color = redMaterial; break;
+                    color = redMaterial; break;
             case 2: 
-                color = yellowMaterial; break;
+                    color = yellowMaterial; break;
             case 3:
-                color = blueMaterial; break;
+                    color = blueMaterial; break;
         }
+        numColor.Remove(rnd);
         Renderer renderer = brick.GetComponent<Renderer>();
         renderer.material= color;
     }
