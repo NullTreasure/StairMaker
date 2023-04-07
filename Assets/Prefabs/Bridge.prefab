@@ -227,7 +227,7 @@ Transform:
   m_Children:
   - {fileID: 5810176356468895276}
   - {fileID: 4976216357395836553}
-  - {fileID: 1180457924372463054}
+  - {fileID: 1214564593390407308}
   - {fileID: 467981295050864205}
   - {fileID: 7936575424965300893}
   - {fileID: 4399161756823378731}
@@ -284,8 +284,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8993277080609259968}
   m_LocalRotation: {x: -0.1647515, y: -0, z: -0, w: 0.9863351}
-  m_LocalPosition: {x: 0.025755405, y: 1.3499999, z: 3.7200003}
-  m_LocalScale: {x: 2, y: 0.5017593, z: 10.19166}
+  m_LocalPosition: {x: 0.025755405, y: 1.15, z: 3.32}
+  m_LocalScale: {x: 2, y: 0.5017593, z: 9.336103}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4977945572679379831}
@@ -349,11 +349,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8993277080609259968}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.95683414}
-  m_Center: {x: 0, y: 0.000000030695862, z: -0.047533274}
+  m_Size: {x: 1, y: 1, z: 1.0384066}
+  m_Center: {x: 0, y: 0.0000000057727387, z: -0.032304466}
 --- !u!54 &1498893160
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -825,6 +825,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StairBrick
       objectReference: {fileID: 0}
+    - target: {fileID: 6055838916302022141, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8768309667696249944, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1036,7 +1040,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8768309667696249944, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
   m_PrefabInstance: {fileID: 7391249646829102039}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &7624206135908331926
+--- !u!1001 &7598781208027579092
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1045,7 +1049,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1026533560607369342, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
       propertyPath: m_Name
-      value: StairBrick (1)
+      value: StairBrick (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026533560607369342, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6055838916302022141, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
       propertyPath: m_Enabled
@@ -1109,10 +1117,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
---- !u!4 &1180457924372463054 stripped
+--- !u!4 &1214564593390407308 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8768309667696249944, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
-  m_PrefabInstance: {fileID: 7624206135908331926}
+  m_PrefabInstance: {fileID: 7598781208027579092}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9210373256234678805
 PrefabInstance:
@@ -1124,6 +1132,10 @@ PrefabInstance:
     - target: {fileID: 1026533560607369342, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
       propertyPath: m_Name
       value: StairBrick (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055838916302022141, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8768309667696249944, guid: 4cfb0a34f15028d44a11867cadf40a8f, type: 3}
       propertyPath: m_RootOrder

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private ColorTypes color;
     [SerializeField] private Material redMaterial;
@@ -12,39 +12,50 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Material blueMaterial;
     [SerializeField] private GameObject playerSkin;
     [SerializeField] private GameObject Player;
+    private GameObject enemy1;
+    private GameObject enemy2;
     [SerializeField] private GameObject enemy;
     [SerializeField] private List<GameObject> GroundState;
+
+    public bool endGame;
 
     List<int> numColor = new List<int>(3) { 1, 2, 3 };
     private void Awake()
     {
-        
+        endGame = false;
     }
     void Start()
     {
-        GameObject enemy1 = Instantiate(enemy, enemy.transform.position,Quaternion.identity);
+        enemy1 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
         enemy1.SetActive(true);
-        this.setColor(enemy1.GetComponent<Enemy>().enemy);
-        GameObject enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3,0,0), Quaternion.identity);
+        this.setColor(enemy1.GetComponent<Enemy>().skin);
+        enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3, 0, 0), Quaternion.identity);
         enemy2.SetActive(true);
-        this.setColor(enemy2.GetComponent<Enemy>().enemy);
+        this.setColor(enemy2.GetComponent<Enemy>().skin);
         this.setColor(playerSkin);
     }
     private void Update()
     {
-        foreach(GameObject ground in GroundState)
-        {
-            if (ground.name != Player.GetComponent<Player>().groundState.name)
-            {
-                ground.GetComponent<Ground>().deActiveBrick(Player.GetComponent<Player>().player);
-            }
-        }
+        deleteState(Player);
+        deleteState(enemy1);
+        deleteState(enemy2);
     }
 
     // Update is called once per frame
-    private void setColor(GameObject brick)
+    private void deleteState(GameObject character)
+    {
+        foreach (GameObject ground in GroundState)
+        {
+            if (ground.name != character.GetComponent<Character>().groundState.name)
+            {
+                ground.GetComponent<Ground>().deActiveBrick(character.GetComponent<Character>().color);
+            }
+        }
+    }
+    private void setColor(GameObject character)
     {
         int rnd = 0;
+        Character skin = character.GetComponentInParent<Character>();
         Material color = redMaterial;
         do
         {
@@ -53,14 +64,20 @@ public class GameManager : MonoBehaviour
         switch(rnd)
         {
             case 1:
-                    color = redMaterial; break;
+                    color = redMaterial;
+                    skin.color = ColorTypes.Color.red;
+                    break;
             case 2: 
-                    color = yellowMaterial; break;
+                    color = yellowMaterial;
+                    skin.color = ColorTypes.Color.yellow;
+                    break;
             case 3:
-                    color = blueMaterial; break;
+                    color = blueMaterial;
+                    skin.color = ColorTypes.Color.blue;
+                    break;
         }
         numColor.Remove(rnd);
-        Renderer renderer = brick.GetComponent<Renderer>();
+        Renderer renderer = character.GetComponent<Renderer>();
         renderer.material= color;
     }
 }

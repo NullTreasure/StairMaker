@@ -1,32 +1,25 @@
 using UnityEngine;
 public enum Direct { Forward, Back, Left, Right }
-public class Player : MonoBehaviour
+public class Player : Character
 {
     [SerializeField] private FloatingJoystick joystick;
-    [SerializeField] private GameObject stairBrick;
-    [SerializeField] private GameObject skin;
-    [SerializeField] private LayerMask BridgeBrick;
-    [SerializeField] private LayerMask Bridge;
-
-    public GameObject player;
-    public GameObject groundState;
 
     private Bridge _bridge;
     private Ground ground;
-    private Vector3 positionGround;
+    public Vector3 positionGround;
     private float horizontal;
     private float vertical;
     private Vector3 direct;
     private bool isMoving;
     private float speed;
     private float rotationSpeed;
-    public int countBrick;
     private float maxSlopeAngle = 90.0f;
 
     private Vector3 slopeNormal;
 
     void Start()
     {
+        countBrick = 0;
         isMoving = false;
         direct = Vector3.zero;
         speed = 10;
@@ -36,6 +29,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.endGame) return;
         horizontal = joystick.Horizontal;
         vertical = joystick.Vertical;
         direct = new Vector3(horizontal, 0, vertical);
@@ -44,26 +38,23 @@ public class Player : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up *2, Vector3.down, out hit, Mathf.Infinity, Bridge))
             {
-                if (countBrick == 1)
-                {
-                    this._bridge.updateMaxz();
-                } else if (countBrick >1)
-                {
-                    this._bridge.resetMaxz();
-                }
                 this._bridge.limitArea();
-                this.MoveOnBridge(direct, hit);
                 if (vertical > 0)
                 {
-                    this.checkBrick();   
+                    if (countBrick > 0 )
+                    {
+                        this.checkBrick();
+                    }
+                    else if (countBrick == 0)
+                    {
+                        direct = new Vector3(horizontal, 0, 0);
+                    }
                 }
+                this.MoveOnBridge(direct, hit);
             }
             else
             {
-                if (countBrick == 0)
-                {
-                    this.ground.banBridge();
-                }
+                this.checkSpecialBrick();
                 transform.position = new Vector3(transform.position.x, positionGround.y + 0.9f, transform.position.z);
                 ground.limitArea();
                 Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
@@ -87,28 +78,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void addBrick()
-    {
-        countBrick++;
-    }
-    private void checkBrick()
-    {
-        RaycastHit Hit;
-        if (Physics.Raycast(transform.position + Vector3.up *2, Vector3.down, out Hit, Mathf.Infinity, BridgeBrick))
-        {
-            MeshRenderer meshRenderer = Hit.transform.GetComponent<MeshRenderer>();
-            if (meshRenderer != null)
-            {
-                meshRenderer.enabled = true;
-            }
-            Renderer check = Hit.transform.GetComponent<Renderer>();
-            if (!check.material.name.StartsWith(player.GetComponent<Renderer>().material.name))
-            {
-                check.material = player.GetComponent<Renderer>().material;
-                countBrick--;
-            }
-        }
-    }
+    
     private void MoveOnBridge(Vector3 direction, RaycastHit hit)
     {
         slopeNormal = hit.normal;

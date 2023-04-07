@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,13 +7,13 @@ public class Ground : MonoBehaviour
     [SerializeField] private Bounds bounds;
 
     [SerializeField] private GameObject prefabBrick;
-    [SerializeField] private ColorTypes color;
     [SerializeField] private Material redMaterial;
     [SerializeField] private Material yellowMaterial;
     [SerializeField] private Material blueMaterial;
+
     public List<Vector3> Bricks = new List<Vector3>();
     
-    private List<GameObject> listBricks= new List<GameObject>();
+    public List<GameObject> listBricks= new List<GameObject>();
     private void Start()
     {
         bounds.center = transform.position;
@@ -51,13 +50,9 @@ public class Ground : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Player")
+        if (other.name == "Player" || other.name.StartsWith("Enemy"))
         {
-            this.turnActiveBrick(other.GetComponent<Player>().player);
-        }
-        if (other.name.StartsWith("Enemy"))
-        {
-            this.turnActiveBrick(other.GetComponent<Enemy>().enemy);
+            this.turnActiveBrick(other.GetComponent<Character>().color);
         }
     }
     public void SpawnBrick()
@@ -72,23 +67,23 @@ public class Ground : MonoBehaviour
             listBricks.Add(brick);
         } 
     }
-    private void turnActiveBrick(GameObject check)
+    private void turnActiveBrick(ColorTypes.Color color)
     {
-        Renderer color = check.GetComponent<Renderer>();
         foreach(GameObject brick in listBricks) 
         {
-            if (color.material.name.StartsWith(brick.GetComponent<Renderer>().material.name))
+            ColorTypes.Color colorBrick = brick.GetComponent<Brick>().color;
+            if (colorBrick == color)
             {
                 brick.SetActive(true);
             }
         }
     }
-    public void deActiveBrick(GameObject check)
+    public void deActiveBrick(ColorTypes.Color color)
     {
-        Renderer color = check.GetComponent<Renderer>();
         foreach (GameObject brick in listBricks)
         {
-            if (color.material.name.StartsWith(brick.GetComponent<Renderer>().material.name))
+            ColorTypes.Color colorBrick = brick.GetComponent<Brick>().color;
+            if (colorBrick == color)
             {
                 brick.SetActive(false);
             }
@@ -96,9 +91,9 @@ public class Ground : MonoBehaviour
     }
     private void declarePositonList()
     {
-        for (float i =  bounds.center.x- 6; i <= bounds.center.x + 6; i++)
+        for (float i =  bounds.center.x- 6; i <= bounds.center.x + 6; i+=2)
         {
-            for (float j =bounds.center.z -6; j <=bounds.center.z + 6; j++)
+            for (float j =bounds.center.z -6; j <=bounds.center.z + 6; j+=2)
             {
                 Vector3 postion = new Vector3(i, this.transform.position.y, j);
                 Bricks.Add(postion);
@@ -108,18 +103,24 @@ public class Ground : MonoBehaviour
     private void setColor(GameObject brick)
     {
         int rnd = Random.Range(1, 4);
-        Material color = redMaterial;
+        Brick brickScript = brick.GetComponent<Brick>();
+        Material colorMaterial = redMaterial;
         switch (rnd)
         {
             case 1:
-                color = redMaterial; break;
+                colorMaterial = redMaterial;
+                brickScript.color = ColorTypes.Color.red;
+                break;
             case 2:
-                color = yellowMaterial; break;
+                colorMaterial = yellowMaterial;
+                brickScript.color = ColorTypes.Color.yellow;
+                break;
             case 3:
-                color = blueMaterial; break;
+                colorMaterial = blueMaterial;
+                brickScript.color = ColorTypes.Color.blue; break;
         }
         Renderer renderer = brick.GetComponent<Renderer>();
-        renderer.material = color;
+        renderer.material = colorMaterial;
     }
 
 }

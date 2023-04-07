@@ -24,11 +24,7 @@ public class Bridge : MonoBehaviour
         {
             player.position = new Vector3(bounds.min.x, player.position.y, player.position.z);
         }
-        if (player.position.z >= zRange + 0.4f)
-        {
-            player.position = new Vector3(player.position.x, yPosition, zRange + 0.4f);
-        }
-        //player.position = new Vector3(Mathf.Clamp(player.position.x, bounds.min.x, bounds.max.x), player.position.y, Mathf.Clamp(player.position.z, -Mathf.Infinity, zRange + 0.4f));
+
 
     }
     public void updateMaxz()
