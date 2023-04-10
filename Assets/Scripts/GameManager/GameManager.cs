@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -23,19 +24,34 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         endGame = false;
+        enemy1 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
+        enemy1.SetActive(true);
+        Enemy _enemy1 = enemy1.GetComponent<Enemy>();
+        setColor(_enemy1.skin);
+        SetGround(_enemy1);
+        //this.setColor(enemy1.GetComponent<Enemy>().skin);
+        enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3, 0, 0), Quaternion.identity);
+        enemy2.SetActive(true);
+
+        Enemy _enemy2 = enemy2.GetComponent<Enemy>();
+        setColor(_enemy2.skin);
+        SetGround(_enemy2);
+        //this.setColor(enemy2.GetComponent<Enemy>().skin);
+        this.setColor(playerSkin);
     }
     void Start()
     {
-        enemy1 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
-        enemy1.SetActive(true);
-        this.setColor(enemy1.GetComponent<Enemy>().skin);
-        enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3, 0, 0), Quaternion.identity);
-        enemy2.SetActive(true);
-        this.setColor(enemy2.GetComponent<Enemy>().skin);
-        this.setColor(playerSkin);
+       
     }
+
+    private void SetGround(Enemy enemy)
+    {
+        enemy.ground = GroundState[0].GetComponent<Ground>();
+    }
+
     private void Update()
     {
+        if (endGame) return;
         deleteState(Player);
         deleteState(enemy1);
         deleteState(enemy2);
@@ -44,11 +60,23 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     private void deleteState(GameObject character)
     {
+        
         foreach (GameObject ground in GroundState)
         {
             if (ground.name != character.GetComponent<Character>().groundState.name)
             {
                 ground.GetComponent<Ground>().deActiveBrick(character.GetComponent<Character>().color);
+            }
+        }
+    }
+    public void deleteAllState()
+    {
+        foreach (GameObject ground in GroundState)
+        {
+            foreach(GameObject brick in ground.GetComponent<Ground>().listBricks )
+            {
+                Destroy(brick);
+                ground.GetComponent<Ground>().listBricks = null;
             }
         }
     }

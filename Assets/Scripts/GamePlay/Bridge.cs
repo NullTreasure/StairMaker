@@ -5,14 +5,12 @@ using UnityEngine;
 public class Bridge : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    private Bounds bounds;
-    [SerializeField] private float zRange = Mathf.Infinity;
-    private float yPosition = 0;
+    [SerializeField] private Bounds bounds;
 
     private void Start()
     {
         bounds.center = transform.position;
-        bounds.extents = new Vector3(0.7f, 0, 0.8f);
+        bounds.extents = new Vector3(0.4f, 0, 0.8f);
     }
     public void limitArea()
     {
@@ -24,16 +22,5 @@ public class Bridge : MonoBehaviour
         {
             player.position = new Vector3(bounds.min.x, player.position.y, player.position.z);
         }
-
-
-    }
-    public void updateMaxz()
-    {
-        zRange = player.position.z;
-        yPosition = player.position.y;
-    }
-    public void resetMaxz()
-    {
-        zRange = Mathf.Infinity;
     }
 }

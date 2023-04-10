@@ -395,11 +395,13 @@ MonoBehaviour:
   specialBridgeBrick:
     serializedVersion: 2
     m_Bits: 256
+  collectedBrick: []
   skin: {fileID: 576569284}
   groundState: {fileID: 0}
   countBrick: 0
   color: 0
   agent: {fileID: 422065418}
+  ground: {fileID: 0}
 --- !u!136 &422065416
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1090,6 +1092,7 @@ GameObject:
   - component: {fileID: 1316047207}
   - component: {fileID: 1316047206}
   - component: {fileID: 1316047209}
+  - component: {fileID: 1316047210}
   m_Layer: 7
   m_Name: GroundWin
   m_TagString: Untagged
@@ -1123,8 +1126,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.2906445}
-  m_Center: {x: 0, y: 0, z: -0.14532211}
+  m_Size: {x: 1, y: 1, z: 1.1243619}
+  m_Center: {x: 0, y: 0, z: -0.06218074}
 --- !u!23 &1316047207
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1187,6 +1190,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383bcc60eb795a944a1d41b032b364e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &1316047210
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316047204}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1365220248
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,6 +2079,7 @@ MonoBehaviour:
   specialBridgeBrick:
     serializedVersion: 2
     m_Bits: 256
+  collectedBrick: []
   skin: {fileID: 2069085354}
   groundState: {fileID: 0}
   countBrick: 0
@@ -2113,8 +2133,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.9999998, z: 1.0332022}
-  m_Center: {x: 0, y: 2, z: -0.016601015}
+  m_Size: {x: 1, y: 2.9999998, z: 1.0332341}
+  m_Center: {x: 0, y: 2, z: -0.016616965}
 --- !u!23 &2140961090
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2275,6 +2295,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4977945572679379831, guid: 4f493a760189149449ae3b4f3f6059ff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442956952769997482, guid: 4f493a760189149449ae3b4f3f6059ff, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442956952769997482, guid: 4f493a760189149449ae3b4f3f6059ff, type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8496456552098669051, guid: 4f493a760189149449ae3b4f3f6059ff, type: 3}

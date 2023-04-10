@@ -12,29 +12,16 @@ public class Brick : MonoBehaviour
         {
             ground = other.GetComponent<Ground>();
         }
-        if (other.name == "Player")
+        if (other.name == "Player"  || other.name.StartsWith("Enemy"))
         {
-            Renderer rendererBrick = GetComponent<Renderer>();
-            Player player = other.GetComponent<Player>();
-            Renderer rendererPlayer = player.skin.GetComponent<Renderer>();
-            if (rendererBrick.material.name == rendererPlayer.material.name)
+            Character character= other.GetComponent<Character>();
+            if (character.color == color)
             {
                 ground.Bricks.Add(this.transform.position);
                 this.gameObject.SetActive(false);
-                player.addBrick();
+                character.addBrick();
             }
         }
-        if (other.name.StartsWith("Enemy"))
-        {
-            Renderer rendererBrick = GetComponent<Renderer>();
-            Enemy enemy = other.GetComponent<Enemy>();
-            Renderer rendererPlayer = enemy.skin.GetComponent<Renderer>();
-            if (rendererBrick.material.name == rendererPlayer.material.name)
-            {
-                ground.Bricks.Add(this.transform.position);
-                this.gameObject.SetActive(false);
-                enemy.addBrick();
-            }
-        }
+        
     }
 }

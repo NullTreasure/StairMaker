@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class SeekBrick : EnemyBaseState
 {
-    private Ground ground;
 
     float distance = Mathf.Infinity;
     Vector3 des = Vector3.zero;
@@ -29,8 +28,9 @@ public class SeekBrick : EnemyBaseState
     {
         if (other.name.StartsWith("Ground"))
         {
+            enemy.agent.SetDestination(SeekClosestBrick(enemy));
+            enemy.ground = other.GetComponent<Ground>();
             enemy.groundState = other.gameObject;
-            ground = other.GetComponent<Ground>();
         }
     }
 
@@ -38,10 +38,10 @@ public class SeekBrick : EnemyBaseState
     {
         distance = Mathf.Infinity;
         des = Vector3.zero;
-        if (ground.listBricks.Count > 0)
+        if (enemy.ground.listBricks.Count > 0)
         {
 
-            foreach (GameObject brick in ground.listBricks)
+            foreach (GameObject brick in enemy.ground.listBricks)
             {
                 if (brick.active)
                 {

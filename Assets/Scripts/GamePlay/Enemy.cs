@@ -11,7 +11,10 @@ public class Enemy : Character
     public EnemyBaseState currentState;
     private SeekBrick seekBrick = new SeekBrick();
     private BuildBrick buildBrick = new BuildBrick();
+    private Idle idle= new Idle();
+
     private int ranBrick;
+    public Ground ground;
 
     private void Awake()
     {
@@ -22,25 +25,29 @@ public class Enemy : Character
 
     void Start()
     {
-        currentState.EnterState(this);
         agent = this.GetComponent<NavMeshAgent>();
+        currentState.EnterState(this);
     }
     void Update()
     {
 
-        if (GameManager.Instance.endGame) return;
-        currentState.OnUpdate(this);
+        if (GameManager.Instance.endGame) 
+        {
+            SwitchState(idle);
+            return;
+        }
         if (this.countBrick >= ranBrick)
         {
             agent.SetDestination(new Vector3(0.18f, 3.61f, 79.86f));
             SwitchState(buildBrick);
         }
-        else if (this.countBrick == 0) 
+        else if (this.countBrick == 0 ) 
         {
             ranBrick= Random.Range(1, 8);
             SwitchState(seekBrick);
         }
         this.checkSpecialBrick();
+        currentState.OnUpdate(this);
     }
     
     private void OnTriggerEnter(Collider other)

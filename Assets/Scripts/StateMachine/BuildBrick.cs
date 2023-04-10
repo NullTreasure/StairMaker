@@ -26,6 +26,7 @@ public class BuildBrick : EnemyBaseState
         }
         if (other.name.StartsWith("Ground"))
         {
+            enemy.ground = other.GetComponent<Ground>();
             enemy.groundState = other.gameObject;
         }
     }

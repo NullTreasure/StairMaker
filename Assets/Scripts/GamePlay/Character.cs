@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected LayerMask BridgeBrick;
     [SerializeField] protected LayerMask Bridge;
     [SerializeField] protected LayerMask specialBridgeBrick;
-
+    public List<GameObject> collectedBrick = new List<GameObject>();
 
     public GameObject skin;
     public GameObject groundState;
@@ -18,6 +18,7 @@ public class Character : MonoBehaviour
     public void addBrick()
     {
         countBrick++;
+        GameObject brick = Instantiate(brick);
     }
     public void checkBrick()
     {
