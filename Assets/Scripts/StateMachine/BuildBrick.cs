@@ -19,11 +19,7 @@ public class BuildBrick : EnemyBaseState
     public override void OnTriggerEnter(Enemy enemy, Collider other)
     {
 
-        if (other.name.StartsWith("Real Bridge"))
-        {
-            bridge = other.transform.parent.gameObject;
-            _bridge = bridge.GetComponent<Bridge>();
-        }
+        
         if (other.name.StartsWith("Ground"))
         {
             enemy.ground = other.GetComponent<Ground>();

@@ -11,16 +11,20 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Material redMaterial;
     [SerializeField] private Material yellowMaterial;
     [SerializeField] private Material blueMaterial;
+    [SerializeField] protected Material greenMaterial;
+
     [SerializeField] private GameObject playerSkin;
     [SerializeField] private GameObject Player;
+    
     private GameObject enemy1;
     private GameObject enemy2;
+    private GameObject enemy3;
     [SerializeField] private GameObject enemy;
     [SerializeField] private List<GameObject> GroundState;
 
     public bool endGame;
 
-    List<int> numColor = new List<int>(3) { 1, 2, 3 };
+    List<int> numColor = new List<int>(3) { 1, 2, 3,4 };
     private void Awake()
     {
         endGame = false;
@@ -37,6 +41,12 @@ public class GameManager : Singleton<GameManager>
         setColor(_enemy2.skin);
         SetGround(_enemy2);
         //this.setColor(enemy2.GetComponent<Enemy>().skin);
+
+        enemy3 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
+        enemy3.SetActive(true);
+        Enemy _enemy3 = enemy3.GetComponent<Enemy>();
+        setColor(_enemy3.skin);
+        SetGround(_enemy3);
         this.setColor(playerSkin);
     }
     void Start()
@@ -55,6 +65,7 @@ public class GameManager : Singleton<GameManager>
         deleteState(Player);
         deleteState(enemy1);
         deleteState(enemy2);
+        deleteState(enemy3);
     }
 
     // Update is called once per frame
@@ -87,7 +98,7 @@ public class GameManager : Singleton<GameManager>
         Material color = redMaterial;
         do
         {
-            rnd = Random.Range(1, 4);
+            rnd = Random.Range(1, 5);
         } while (!numColor.Contains(rnd));
         switch(rnd)
         {
@@ -103,6 +114,11 @@ public class GameManager : Singleton<GameManager>
                     color = blueMaterial;
                     skin.color = ColorTypes.Color.blue;
                     break;
+
+            case 4:
+                color = greenMaterial;
+                skin.color = ColorTypes.Color.green;
+                break;
         }
         numColor.Remove(rnd);
         Renderer renderer = character.GetComponent<Renderer>();

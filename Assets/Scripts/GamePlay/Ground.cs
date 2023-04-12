@@ -10,6 +10,7 @@ public class Ground : MonoBehaviour
     [SerializeField] private Material redMaterial;
     [SerializeField] private Material yellowMaterial;
     [SerializeField] private Material blueMaterial;
+    [SerializeField] private Material greenMaterial;
 
     public List<Vector3> Bricks = new List<Vector3>();
     
@@ -102,7 +103,7 @@ public class Ground : MonoBehaviour
     }
     private void setColor(GameObject brick)
     {
-        int rnd = Random.Range(1, 4);
+        int rnd = Random.Range(1, 5);
         Brick brickScript = brick.GetComponent<Brick>();
         Material colorMaterial = redMaterial;
         switch (rnd)
@@ -118,6 +119,9 @@ public class Ground : MonoBehaviour
             case 3:
                 colorMaterial = blueMaterial;
                 brickScript.color = ColorTypes.Color.blue; break;
+            case 4:
+                colorMaterial= greenMaterial;
+                brickScript.color = ColorTypes.Color.green;break;
         }
         Renderer renderer = brick.GetComponent<Renderer>();
         renderer.material = colorMaterial;

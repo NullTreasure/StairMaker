@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
@@ -8,17 +10,24 @@ public class Character : MonoBehaviour
     [SerializeField] protected LayerMask BridgeBrick;
     [SerializeField] protected LayerMask Bridge;
     [SerializeField] protected LayerMask specialBridgeBrick;
+    [SerializeField] protected GameObject prefabBrick;
+    [SerializeField] protected GameObject character;
+    public bool getHit;
+    public Animator anim;
     public List<GameObject> collectedBrick = new List<GameObject>();
 
     public GameObject skin;
     public GameObject groundState;
+    public bool onBridge;
 
-    public int countBrick;
+
     public ColorTypes.Color color;
     public void addBrick()
     {
-        countBrick++;
-        GameObject brick = Instantiate(brick);
+        GameObject brick = Instantiate(prefabBrick,this.transform);
+        brick.transform.localPosition = new Vector3(0, 0.3f, -0.5f) + Vector3.up * 0.21f * collectedBrick.Count;
+        brick.GetComponent<Renderer>().material = skin.GetComponent<Renderer>().material;
+        collectedBrick.Add(brick);
     }
     public void checkBrick()
     {
@@ -34,7 +43,8 @@ public class Character : MonoBehaviour
             if (!check.material.name.StartsWith(skin.GetComponent<Renderer>().material.name))
             {
                 check.material = skin.GetComponent<Renderer>().material;
-                countBrick--;
+                Destroy(collectedBrick[collectedBrick.Count - 1]);
+                collectedBrick.RemoveAt(collectedBrick.Count - 1);
             }
         }
     }
@@ -52,8 +62,43 @@ public class Character : MonoBehaviour
             if (!check.material.name.StartsWith(skin.GetComponent<Renderer>().material.name))
             {
                 check.material = skin.GetComponent<Renderer>().material;
-                countBrick--;
+                if (collectedBrick.Count > 0)
+                {
+                    Destroy(collectedBrick[collectedBrick.Count - 1]);
+                    collectedBrick.RemoveAt(collectedBrick.Count - 1);
+                }
             }
         }
     }
+    public void removeAllBrick()
+    {
+        foreach (GameObject brick in collectedBrick) Destroy(brick);
+        collectedBrick.Clear();
+    }
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (!onBridge)
+        {
+            if (other.name == "Player" || other.name.StartsWith("Enemy"))
+            {
+                if (collectedBrick.Count < other.GetComponent<Character>().collectedBrick.Count)
+                {
+                    getHit = true;
+                    for (int i = 0; i < collectedBrick.Count; i++)
+                    {
+                        other.GetComponent<Character>().addBrick();
+                    }
+                    removeAllBrick();
+                }
+            }
+        }
+    }
+
+    protected virtual void standUp()
+    {
+        anim.SetBool("fall", false);
+        getHit = false;
+    }
+
+    
 }

@@ -22,7 +22,9 @@ public class Win : MonoBehaviour
             GameManager.Instance.endGame = true;
             GameManager.Instance.deleteAllState();
             CameraFollowing.Instance.followTheWinner(other.gameObject);
-            other.GetComponent<Character>().transform.position = new Vector3(0.01962265f, 9.42f, 80.29436f);
+            other.GetComponent<Character>().removeAllBrick();
+            other.GetComponent<Character>().anim.SetBool("win", true);
+            other.GetComponent<Character>().transform.position = new Vector3(0.01962265f, 10.02f, 80.29436f);
         }
     }
 }

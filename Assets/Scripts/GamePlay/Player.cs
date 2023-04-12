@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.AI;
+
 public enum Direct { Forward, Back, Left, Right }
 public class Player : Character
 {
@@ -19,7 +21,8 @@ public class Player : Character
 
     void Start()
     {
-        countBrick = 0;
+        anim = character.GetComponent<Animator>();
+        onBridge = false;
         isMoving = false;
         direct = Vector3.zero;
         speed = 10;
@@ -29,51 +32,66 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.endGame) return;
-        horizontal = joystick.Horizontal;
-        vertical = joystick.Vertical;
-        direct = new Vector3(horizontal, 0, vertical);
-        if (isMoving)
+        if (GameManager.Instance.endGame)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up *2, Vector3.down, out hit, Mathf.Infinity, Bridge))
-            {
-                this._bridge.limitArea();
-                if (vertical > 0)
-                {
-                    if (countBrick > 0 )
-                    {
-                        this.checkBrick();
-                    }
-                    else if (countBrick == 0)
-                    {
-                        direct = new Vector3(horizontal, 0, 0);
-                    }
-                }
-                this.MoveOnBridge(direct, hit);
-            }
-            else
-            {
-                this.checkSpecialBrick();
-                transform.position = new Vector3(transform.position.x, positionGround.y + 0.9f, transform.position.z);
-                ground.limitArea();
-                Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation,toRotation, rotationSpeed * Time.deltaTime);
-                transform.position += direct * speed * Time.deltaTime; 
-            }
-
-            if (Vector3.Distance(Vector3.zero, direct) <= 0.01f)
-            {
-                isMoving = false;
-            }
-
+            return;
+        }
+        this.destroyCharacter();
+        if (getHit)
+        {
+            anim.SetBool("fall", true);
+            Invoke("standUp", 2.2f);
         }
         else
         {
-
-            if (Vector3.Distance(Vector3.zero, direct) >= 0.01f)
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+            direct = new Vector3(horizontal, 0, vertical);
+            if (isMoving)
             {
-                isMoving = true;
+                anim.SetBool("run", true);
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position + Vector3.up * 2, Vector3.down, out hit, Mathf.Infinity, Bridge))
+                {
+                    this._bridge.limitArea();
+                    if (vertical > 0)
+                    {
+                        if (collectedBrick.Count > 0)
+                        {
+                            this.checkBrick();
+                        }
+                        else if (collectedBrick.Count == 0)
+                        {
+                            direct = new Vector3(horizontal, 0, 0);
+                        }
+                    }
+                    this.MoveOnBridge(direct, hit);
+                    onBridge = true;
+                }
+                else
+                {
+                    onBridge = false;
+                    this.checkSpecialBrick();
+                    transform.position = new Vector3(transform.position.x, positionGround.y + 0.9f, transform.position.z);
+                    ground.limitArea();
+                    Quaternion toRotation = Quaternion.LookRotation(direct, Vector3.up);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+                    transform.position += direct * speed * Time.deltaTime;
+                }
+
+                if (Vector3.Distance(Vector3.zero, direct) <= 0.01f)
+                {
+                    isMoving = false;
+                }
+
+            }
+            else
+            {
+                anim.SetBool("run", false);
+                if (Vector3.Distance(Vector3.zero, direct) >= 0.01f)
+                {
+                    isMoving = true;
+                }
             }
         }
     }
@@ -95,8 +113,9 @@ public class Player : Character
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
         if (other.name.StartsWith("Ground"))
         {
             groundState = other.gameObject;
@@ -107,6 +126,21 @@ public class Player : Character
         {
             GameObject bridge = other.transform.parent.gameObject;
             _bridge = bridge.GetComponent<Bridge>();
+        }
+    }
+    protected void destroyCharacter()
+    {
+        int count = 0;
+        foreach (GameObject brick in groundState.GetComponent<Ground>().listBricks)
+        {
+            if (brick.GetComponent<Brick>().color == color)
+            {
+                if (brick.active) count++;
+            }
+        }
+        if (!onBridge && count == 0 && collectedBrick.Count == 0)
+        {
+            GameManager.Instance.endGame = true;
         }
     }
 }
