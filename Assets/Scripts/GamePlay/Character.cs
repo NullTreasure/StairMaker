@@ -43,8 +43,12 @@ public class Character : MonoBehaviour
             if (!check.material.name.StartsWith(skin.GetComponent<Renderer>().material.name))
             {
                 check.material = skin.GetComponent<Renderer>().material;
-                Destroy(collectedBrick[collectedBrick.Count - 1]);
-                collectedBrick.RemoveAt(collectedBrick.Count - 1);
+                if (collectedBrick.Count > 0)
+                {
+
+                    Destroy(collectedBrick[collectedBrick.Count - 1]);
+                    collectedBrick.RemoveAt(collectedBrick.Count - 1);
+                }
             }
         }
     }

@@ -18,7 +18,11 @@ public class Player : Character
     private float maxSlopeAngle = 90.0f;
 
     private Vector3 slopeNormal;
+    private void Awake()
+    {
 
+        groundState = GameObject.Find("Ground1");
+    }
     void Start()
     {
         anim = character.GetComponent<Animator>();
@@ -40,7 +44,7 @@ public class Player : Character
         if (getHit)
         {
             anim.SetBool("fall", true);
-            Invoke("standUp", 2.2f);
+            Invoke("standUp", 2.5f);
         }
         else
         {

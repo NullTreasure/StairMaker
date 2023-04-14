@@ -11,6 +11,7 @@ public class BuildBrick : EnemyBaseState
     public override void EnterState(Enemy enemy)
     {
         enemy.currentState = this;
+        enemy.checkFind = false;
     }
     public override void OnUpdate(Enemy enemy)
     {

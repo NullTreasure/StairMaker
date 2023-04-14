@@ -13,15 +13,19 @@ public class Enemy : Character
     private BuildBrick buildBrick = new BuildBrick();
     private Idle idle= new Idle();
     private IsDead isDead = new IsDead();
+    private FindEnemy findEnemy = new FindEnemy();
 
     private int ranBrick;
     public Ground ground;
+    public bool checkFind;
 
     private void Awake()
     {
+        checkFind = false;
         anim = character.GetComponent<Animator>();
         currentState = seekBrick;
-        ranBrick = Random.Range(1, 8); 
+        ranBrick = Random.Range(3, 11);
+        groundState = GameObject.Find("Ground1");
     }
 
     void Start()
@@ -37,12 +41,13 @@ public class Enemy : Character
             SwitchState(idle);
             return;
         }
+        currentState.OnUpdate(this);
         this.destroyCharacter();
         if (getHit)
         {
             SwitchState(idle);
             anim.SetBool("fall", true);
-            Invoke("standUp", 2.2f);
+            Invoke("standUp", 2.5f);
         }
         else
         {
@@ -55,25 +60,43 @@ public class Enemy : Character
             {
                 onBridge = false;
             }
-            if (collectedBrick.Count >= ranBrick || (remainBrick() && collectedBrick.Count > 0))
+            //if (collectedBrick.Count >= 5 && !onBridge)
+            //{
+            //    SwitchState(findEnemy);
+            //}
+            if (!checkFind)
             {
-                agent.SetDestination(new Vector3(0.01962265f, 10.02f, 80.29436f));
-                SwitchState(buildBrick);
+                if (collectedBrick.Count >= ranBrick || (remainBrick() && collectedBrick.Count > 0))
+                {
+                    agent.SetDestination(new Vector3(0.01962265f, 10.02f, 80.29436f));
+                    SwitchState(buildBrick);
+                }
+                else if (this.collectedBrick.Count == 0)
+                {
+                    ranBrick = Random.Range(3, 11);
+                    SwitchState(seekBrick);
+                }
+                this.checkSpecialBrick();
             }
-            else if (this.collectedBrick.Count == 0)
-            {
-                ranBrick = Random.Range(1, 8);
-                SwitchState(seekBrick);
-            }
-            this.checkSpecialBrick();
-            currentState.OnUpdate(this);
         }
+
     }
     
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
         currentState.OnTriggerEnter(this, other);
+        if (other.name == "Player" || other.name.StartsWith("Enemy"))
+        {
+            if (remainBrick())
+            {
+                SwitchState(buildBrick);
+            }
+            else
+            {
+                SwitchState(seekBrick);
+            }
+        }
     }
     public void SwitchState(EnemyBaseState state)
     {

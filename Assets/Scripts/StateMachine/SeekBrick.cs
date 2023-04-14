@@ -14,6 +14,7 @@ public class SeekBrick : EnemyBaseState
     {
         enemy.currentState = this;
         enemy.agent.SetDestination(SeekClosestBrick(enemy));
+        enemy.checkFind = false ;
     }
     public override void OnUpdate(Enemy enemy)
     {

@@ -15,12 +15,16 @@ public class Ground : MonoBehaviour
     public List<Vector3> Bricks = new List<Vector3>();
     
     public List<GameObject> listBricks= new List<GameObject>();
-    private void Start()
+    private void Awake()
     {
         bounds.center = transform.position;
+        bounds.extents = new Vector3(10.0f, 0, 10.0f);
         this.declarePositonList();
-        bounds.extents = new Vector3(10.0f,0,10.0f);
         this.SpawnBrick();
+    }
+    private void Start()
+    {
+        
     }
     public void limitArea()
     {

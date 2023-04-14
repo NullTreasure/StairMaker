@@ -19,12 +19,14 @@ public class Win : MonoBehaviour
     {
         if (other.name == "Player" || other.name.StartsWith("Enemy"))
         {
+            if (other.name == "Player") GameManager.Instance.isWin= true;
             GameManager.Instance.endGame = true;
             GameManager.Instance.deleteAllState();
             CameraFollowing.Instance.followTheWinner(other.gameObject);
             other.GetComponent<Character>().removeAllBrick();
             other.GetComponent<Character>().anim.SetBool("win", true);
             other.GetComponent<Character>().transform.position = new Vector3(0.01962265f, 10.02f, 80.29436f);
+            UIManager.Instance.endGameButton(GameManager.Instance.isWin);
         }
     }
 }

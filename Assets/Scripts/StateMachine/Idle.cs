@@ -7,6 +7,7 @@ public class Idle : EnemyBaseState
         public override void EnterState(Enemy enemy)
         {
             enemy.currentState= this;
+            enemy.checkFind = false;
             enemy.agent.velocity = Vector3.zero;
         }
         public override void OnUpdate(Enemy enemy)

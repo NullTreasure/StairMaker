@@ -23,24 +23,28 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<GameObject> GroundState;
 
     public bool endGame;
+    public bool isWin;
 
     List<int> numColor = new List<int>(3) { 1, 2, 3,4 };
     private void Awake()
     {
+
+        isWin = false;
         endGame = false;
+    }
+    void Start()
+    {
         enemy1 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
         enemy1.SetActive(true);
         Enemy _enemy1 = enemy1.GetComponent<Enemy>();
         setColor(_enemy1.skin);
         SetGround(_enemy1);
-        //this.setColor(enemy1.GetComponent<Enemy>().skin);
         enemy2 = Instantiate(enemy, enemy.transform.position + new Vector3(3, 0, 0), Quaternion.identity);
         enemy2.SetActive(true);
 
         Enemy _enemy2 = enemy2.GetComponent<Enemy>();
         setColor(_enemy2.skin);
         SetGround(_enemy2);
-        //this.setColor(enemy2.GetComponent<Enemy>().skin);
 
         enemy3 = Instantiate(enemy, enemy.transform.position, Quaternion.identity);
         enemy3.SetActive(true);
@@ -49,13 +53,10 @@ public class GameManager : Singleton<GameManager>
         SetGround(_enemy3);
         this.setColor(playerSkin);
     }
-    void Start()
-    {
-       
-    }
 
     private void SetGround(Enemy enemy)
     {
+
         enemy.ground = GroundState[0].GetComponent<Ground>();
     }
 
